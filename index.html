@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Comparison</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            width: 250px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .pass {
+            color: green;
+        }
+        .fail {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Gift Box Check</h2>
+    <label for="number1">Enter mobile IMEI 1:</label>
+    <input type="number" id="number1" onkeydown="handleKeyDown(event, 'number2')" maxlength="15"><br>
+    <label for="number2">Enter mobile IMEI 2:</label>
+    <input type="number" id="number2" onkeydown="handleSecondKeyDown(event, 'number3')" maxlength="15"><br>
+    <label for="number3">Enter gift box IMEI:</label>
+    <input type="number" id="number3" onkeydown="handleCheck(event)" maxlength="15"><br>
+    <button id="checkButton" onclick="checkNumbers()">Check Numbers</button>
+    <button id="resetButton" onclick="resetFields()">Reset</button>
+    <div class="status">
+        <h1 id="result"></h1>
+        <p>Pass Status: <span id="passCount" class="pass">0</span></p>
+        <p>Fail Status: <span id="failCount" class="fail">0</span></p>
+    </div>
+
+    <script>
+        let passCount = 0;
+        let failCount = 0;
+
+        function handleKeyDown(event, nextElementId) {
+            if (event.key === 'Enter') {
+                if (event.target.value.length === 15) {
+                    event.preventDefault();
+                    document.getElementById(nextElementId).focus();
+                } else {
+                    alert("Each input must be exactly 15 digits.");
+                    event.target.value = '';
+                }
+            }
+        }
+
+        function handleSecondKeyDown(event, nextElementId) {
+            if (event.key === 'Enter') {
+                if (event.target.value.length === 15) {
+                    const num1 = document.getElementById('number1').value;
+                    const num2 = event.target.value;
+                    if (num1 === num2) {
+                        alert("Number 2 must be different from Number 1. Please re-enter.");
+                        event.target.value = '';
+                    } else {
+                        event.preventDefault();
+                        document.getElementById(nextElementId).focus();
+                    }
+                } else {
+                    alert("Each input must be exactly 15 digits.");
+                    event.target.value = '';
+                }
+            }
+        }
+
+        function handleCheck(event) {
+            if (event.key === 'Enter') {
+                if (event.target.value.length === 15) {
+                    event.preventDefault();
+                    checkNumbers();
+                } else {
+                    alert("Each input must be exactly 15 digits.");
+                    event.target.value = '';
+                }
+            }
+        }
+
+        function checkNumbers() {
+            const num1 = document.getElementById("number1").value;
+            const num2 = document.getElementById("number2").value;
+            const num3 = document.getElementById("number3").value;
+
+            if (num1.length === 15 && num2.length === 15 && num3.length === 15) {
+                if (num1 !== num2 && (num3 === num1 || num3 === num2)) {
+                    document.getElementById("result").innerText = "Pass";
+                    document.getElementById("result").className = "pass";
+                    passCount++;
+                    document.getElementById("passCount").innerText = passCount;
+                } else {
+                    document.getElementById("result").innerText = "Fail";
+                    document.getElementById("result").className = "fail";
+                    failCount++;
+                    document.getElementById("failCount").innerText = failCount;
+                }
+                resetFields();
+            } else {
+                document.getElementById("result").innerText = "All inputs must be 15 digits";
+                document.getElementById("result").className = "";
+            }
+        }
+
+        function resetFields() {
+            document.getElementById("number1").value = '';
+            document.getElementById("number2").value = '';
+            document.getElementById("number3").value = '';
+            document.getElementById("number1").focus();
+        }
+    </script>
+</body>
+</html>
